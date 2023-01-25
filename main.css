@@ -1,0 +1,283 @@
+body {
+    margin: 0;
+}
+
+:root {
+    font-size: 10px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #fafafa;
+    font-family: Calibri, sans-serif;
+    font-size: 18px;
+}
+
+#container {
+    margin: 0 auto;
+    width: 80%;
+    margin-top: 20px;
+}
+
+.container {
+    max-width: 100rem;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+}
+
+table,
+tr,
+td {
+    border-collapse: collapse;
+    border: 1px dotted black;
+    font-family: Calibri, sans-serif;
+}
+
+table tr:first-child {
+    border: 1px solid white;
+}
+
+td {
+    width: 200px;
+    padding: 10px 10px;
+    text-transform: uppercase;
+    color: #bbb;
+    font-size: 16px;
+}
+
+td:first-child {
+    border-right: 5px solid black;
+    background-color: #ddd;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+table td:first-child {
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    width: 200px;
+    background-color: aquamarine;
+    padding: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 5px solid black;
+}
+
+th:first-child {
+    border: none;
+    background-color: white;
+}
+
+tr.sel th {
+    width: 50px;
+    background-color: #ddd;
+    border: 1px solid #ddd;
+    border-right: 5px solid black;
+}
+
+hr {
+    border: 1px dashed #ccc;
+}
+
+h3 {
+    margin: 0;
+    padding: 0;
+}
+
+form {
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-size: 17px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* суреттер */
+
+.navbar {
+    height: 65px;
+    box-shadow: 0 10px 50px hsl(0, 0%, 90%);
+}
+
+
+.logo a {
+    float: left;
+    padding: 20px;
+    color: hsl(0, 0%, 40%);
+}
+
+.menu {
+    float: right;
+}
+
+.menu li {
+    list-style: none;
+    display: inline-block;
+}
+
+.menu li a {
+    padding: 20px 30px;
+    color: hsl(0, 0%, 60%);
+    float: left;
+    transition: color .3s ease-in-out;
+}
+
+.menu li a:hover {
+    color: hsl(0, 0%, 30%);
+    transition: color .5s ease-in-out;
+}
+
+.heading {
+    font-family: "Montserrat", Arial, sans-serif;
+    font-size: 4rem;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+    padding: 3.5rem 0;
+    color: #1a1a1a;
+}
+
+.heading span {
+    display: block;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    /* Compensate for excess margin on outer gallery flex items */
+    margin: -1rem -1rem;
+}
+
+.gallery-item {
+    /* Minimum width of 24rem and grow to fit available space */
+    flex: 1 0 24rem;
+    /* Margin value should be half of grid-gap value as margins on flex items don't collapse */
+    margin: 1rem;
+    box-shadow: 0.3rem 0.4rem 0.4rem rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.gallery-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms ease-out;
+}
+
+.gallery-image:hover {
+    transform: scale(1.15);
+}
+
+/*
+
+The following rule will only run if your browser supports CSS grid.
+
+Remove or comment-out the code block below to see how the browser will fall-back to flexbox styling. 
+
+*/
+
+@supports (display: grid) {
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+        grid-gap: 2rem;
+    }
+
+    .gallery,
+    .gallery-item {
+        margin: 0;
+    }
+}
+
+.youtube {
+    margin-top: 50px;
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.youtube iframe,
+.youtube object,
+.youtube embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.youtube__img {
+    bottom: 0;
+    display: block;
+    left: 0;
+    margin: auto;
+    max-width: 100%;
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: auto;
+    cursor: pointer;
+}
+
+.youtube__play {
+    height: 72px;
+    width: 72px;
+    left: 50%;
+    top: 50%;
+    margin-left: -36px;
+    margin-top: -36px;
+    position: absolute;
+    background: url("https://i.imgur.com/TxzC70f.png") no-repeat;
+    cursor: pointer;
+}
+
+/* info */
+
+
+.student {
+    display: block;
+    padding: 16px;
+    max-width: 600px;
+    margin: 16px auto;
+    border-radius: 4px;
+    background-color: #FFFFFF;
+  }
+.student-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  .student-item {
+    margin-bottom: 8px;
+    border: 1px solid #C1DEEB;
+    color: #131815;
+    font-weight: 300;
+    padding: 8px 8px;
+  }
