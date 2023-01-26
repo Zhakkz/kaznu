@@ -1,0 +1,3041 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Сервис для заведения потенциальных участников сделки ГСЗ (группа связанных заемщиков).",
+        "title": "GSZ Participants API",
+        "contact": {
+            "name": "Alibek Kaparov",
+            "email": "Alibek.Kaparov@sberbank.kz"
+        },
+        "version": "1.0"
+    },
+    "host": "participants-gsz.apps.ocp-t.sberbank.kz",
+    "basePath": "/api/v1",
+    "paths": {
+        "/changelogs/{relation}/{entity}": {
+            "get": {
+                "description": "Эндпоинт для получения списка изменений.\nНеобходимые параметры - ID объекта и номер таблицы, к которой он принадлежит.\nГруппы - 1,\nУчастники - 2,\nЛимиты - 3,",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Changelog"
+                ],
+                "summary": "Список изменений.",
+                "operationId": "ListChangelog",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "имя таблицы",
+                        "name": "relation",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID объекта",
+                        "name": "entity",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "страница пагинации",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ограничение по размеру",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Changelog"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/coordinations/": {
+            "post": {
+                "description": "Эндпоинт для создания результата согласования по ГСЗ.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coordination"
+                ],
+                "summary": "Создать результат согласования.",
+                "operationId": "CreateCoordination",
+                "parameters": [
+                    {
+                        "description": "Данные о результате согласования",
+                        "name": "Payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Coordination"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Coordination"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/coordinations/{group}": {
+            "get": {
+                "description": "Эндпоинт для получения списка результатов согласования по ГСЗ.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coordination"
+                ],
+                "summary": "Получить список результатов согласований.",
+                "operationId": "ListCoordination",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Coordination"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/fs/add/{otype}/{oid}": {
+            "post": {
+                "description": "Создание связи между объектом и файлом.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FS"
+                ],
+                "summary": "Привязка файла к объектам.",
+                "operationId": "AddFiles",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Тип объекта",
+                        "name": "otype",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID объекта",
+                        "name": "oid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "ID файлов",
+                        "name": "files",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.FileSeq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/fs/download/{id}": {
+            "get": {
+                "description": "Скачивание файла с HAOS Storage.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FS"
+                ],
+                "summary": "Скачивание файла.",
+                "operationId": "Download",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID файла",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.File"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/fs/get/{otype}/{oid}": {
+            "get": {
+                "description": "Эндпоинт возвращает список файлов, относящихся к объекту.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FS"
+                ],
+                "summary": "Получение списка файлов для объекта.",
+                "operationId": "GetFiles",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Тип объекта",
+                        "name": "otype",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID объекта",
+                        "name": "oid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.File"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/fs/remove/{otype}{oid}": {
+            "delete": {
+                "description": "Удаление файла с `базы ГСЗ.",
+                "tags": [
+                    "FS"
+                ],
+                "summary": "Удаление файла.",
+                "operationId": "Remove",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Тип объекта",
+                        "name": "otype",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID файла",
+                        "name": "oid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/fs/upload": {
+            "post": {
+                "description": "Загрузка файла на HAOS Storage.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FS"
+                ],
+                "summary": "Загрузка файла.",
+                "operationId": "Upload",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "метаданные о связанном лице",
+                        "name": "metadata",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "файл",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.File"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/gsz/": {
+            "get": {
+                "description": "Эндпоинт для получения списка ГСЗ. Виден работникам банка.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Group"
+                ],
+                "summary": "Список ГСЗ.",
+                "operationId": "ListGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "страница пагинации: 1",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ограничение по размеру: 10",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "наименование ГСЗ: `qwerty`",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "наименование департамента (не ID): `00`",
+                        "name": "filial",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "полное ФИО автора ГСЗ: `Жигули Молдакалыкович Дайрабаев`",
+                        "name": "author",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "период дат в которых создано ГСЗ, разделенный двоеточием: `2022-07-01:2022-07-01` или если нужно на конкретную дату, то `2022-07-01`",
+                        "name": "created",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "период дат в которых обновлено ГСЗ, разделенный двоеточием: `2022-07-01:2022-07-01` или если нужно на конкретную дату, то `2022-07-01`",
+                        "name": "updated",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID состояний через запятую: `1,2,3,4`",
+                        "name": "states",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pagination"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Эндпоинт для создания ГСЗ. Этот эндпоинт должен вызваться с фронта первым.\nПосле этого начинается заведение участников сделки.\nВозвращает ID созданного ГСЗ, который будет нужен для создания связанных лиц.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Group"
+                ],
+                "summary": "Создание ГСЗ.",
+                "operationId": "CreateGroup",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Group"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/gsz/coordinated/{role}": {
+            "get": {
+                "description": "Эндпоинт для получения списка ГСЗ на согласовании в зависимости от ФИО и кода роли.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Group"
+                ],
+                "summary": "Список ГСЗ на согласовании.",
+                "operationId": "ListGroupsOnCoordination",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Код роли автора",
+                        "name": "role",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ФИО автора",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "страница пагинации: 1",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ограничение по размеру: 10",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pagination"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/gsz/indicators/{role}": {
+            "get": {
+                "description": "Эндпоинт для получения индикаторов в зависимости от ФИО и кода роли.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Group"
+                ],
+                "summary": "Получение индикаторов.",
+                "operationId": "GetIndicators",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Код роли автора",
+                        "name": "role",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ФИО автора",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/gsz/justify-disjoin": {
+            "post": {
+                "description": "Эндпоинт для создания обоснования отказа от объединения двух ГСЗ.\nЕсли участник найден в главной группе и она согласована,\nно КМ/ГКМ отказался объединять группы, то заполняется обоснование.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Group"
+                ],
+                "summary": "Создать обоснование для отказа ГСЗ.",
+                "operationId": "JustifyDisjoin",
+                "parameters": [
+                    {
+                        "description": "Тело запроса",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.DisjoinJustification"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/gsz/move/{src}/to/{dst}": {
+            "post": {
+                "description": "Эндпоинт для перемещения связей, лимитов и др. с одой группы в другую.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Group"
+                ],
+                "summary": "Перемещение ГСЗ в другую ГСЗ (Объединение).",
+                "operationId": "Move",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID группы-источника",
+                        "name": "src",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID новой ГСЗ",
+                        "name": "dst",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/gsz/{id}": {
+            "get": {
+                "description": "Эндпоинт для просмотра ГСЗ по ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Group"
+                ],
+                "summary": "Просмотреть объект ГСЗ.",
+                "operationId": "RetrieveGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Group"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Эндпоинт для обновления ГСЗ.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Group"
+                ],
+                "summary": "Обновить ГСЗ.",
+                "operationId": "UpdateGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Данные для обновления ГСЗ",
+                        "name": "Payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Group"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Group"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Эндпоинт для удаления ГСЗ.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Group"
+                ],
+                "summary": "Удалить ГСЗ.",
+                "operationId": "DeleteGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/limits/": {
+            "post": {
+                "description": "Эндпоинт для создания лимита связанного лица.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Limits"
+                ],
+                "summary": "Создание лимита.",
+                "operationId": "CreateLimit",
+                "parameters": [
+                    {
+                        "description": "Список лимитов",
+                        "name": "limits",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Limit"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/limits/group/{group}": {
+            "get": {
+                "description": "Эндпоинт для получения списка лимитов.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Limits"
+                ],
+                "summary": "Получение лимитов.",
+                "operationId": "ListLimit",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Limits"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/limits/{id}": {
+            "put": {
+                "description": "Эндпоинт для обновления лимита связанного лица.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Limits"
+                ],
+                "summary": "Обновление лимита.",
+                "operationId": "UpdateLimit",
+                "parameters": [
+                    {
+                        "description": "Данные о лимите",
+                        "name": "limit",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Limit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Limit"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Эндпоинт для удаления лимита связанного лица.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Limits"
+                ],
+                "summary": "Удаление лимита.",
+                "operationId": "DeleteLimit",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID лимита",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/": {
+            "post": {
+                "description": "Эндпоинт для создания участника сделки.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Создание участника сделки.",
+                "operationId": "CreateMembers",
+                "parameters": [
+                    {
+                        "description": "Данные для создания записи",
+                        "name": "Payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Member"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/connect": {
+            "post": {
+                "description": "Эндпоинт для связки УС и СЛ.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Соединить участников сделки и связанные лица.",
+                "operationId": "ConnectMembers",
+                "parameters": [
+                    {
+                        "description": "Данные о связке",
+                        "name": "Relation",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Relation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/exists/{idNum}": {
+            "get": {
+                "description": "Эндпоинт для поиска связанных лиц во всех ГСЗ по идентификационному номеру (ИИН/БИН).",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Поиск связанного лица во всех ГСЗ по ИН",
+                "operationId": "ExistsInGroups",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ИИН/БИН",
+                        "name": "idNum",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SearchData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/group/{group}": {
+            "get": {
+                "description": "Эндпоинт для получения всех участников сделки по ID ГСЗ.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Получить участников сделки ГСЗ.",
+                "operationId": "ListMembers",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "страница пагинации",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ограничение по размеру",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Member"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/relations/{group}": {
+            "get": {
+                "description": "Эндпоинт для получения всех связей участников сделки по ID ГСЗ.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Получить связи участников сделки ГСЗ.",
+                "operationId": "ListRelations",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID участника",
+                        "name": "object",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "страница пагинации",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ограничение по размеру",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Relation"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/search/{group}": {
+            "get": {
+                "description": "Эндпоинт для поиска участников по ID группы и параметру (имя ИИН/БИН).",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Поиск участников",
+                "operationId": "SearchInGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID группы",
+                        "name": "Group",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Значение поиска",
+                        "name": "By",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SearchData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/{group}/exclude": {
+            "get": {
+                "description": "Эндпоинт для получения всех участников ГСЗ по группе и ролям, которые должны быть исключены.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Получить список участников по группе и исключенным ролям.",
+                "operationId": "ListRelationsByExcludedRoles",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID роли (критерия связанности)",
+                        "name": "roles",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "страница пагинации",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ограничение по размеру",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pagination"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/{group}/main": {
+            "get": {
+                "description": "Эндпоинт для получения всех связей главных участников\n(заёмщик, созаёмщик, гарант, залогодатель) сделки по ID ГСЗ.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Получить связи главных участников сделки ГСЗ.",
+                "operationId": "ListMainRelations",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "страница пагинации",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ограничение по размеру",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pagination"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/{group}/main/members": {
+            "get": {
+                "description": "Эндпоинт для получения данных о главных участниках сделки.\nК ним относятся заёмщики, созаёмщики, гаранты, залогдатели.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Список главных участников сделки.",
+                "operationId": "ListMainMembers",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID группы",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Номер страницы",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Лимит объектов",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pagination"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/{group}/other/members": {
+            "get": {
+                "description": "Эндпоинт для получения данных о других участниках сделки.\nК ним относятся все те, кто не является заёмщиком, созаёмщиком,\nгарантом, залогодателем, но связанные с ними в одной группе.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Список прочих участников сделки.",
+                "operationId": "ListOtherMembers",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID группы",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Номер страницы",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Лимит объектов",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pagination"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/{group}/relations/{object}": {
+            "get": {
+                "description": "Эндпоинт для получения всех связей по ID ГСЗ, ID главного лица.\nЕсли главное лицо - \"заемщик\" и указывается обратная роль \"созаемщик\",\nто выйдут все связи группы типа \"заемщик-созаемщики\".",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Получить список связей ГСЗ по ID ГСЗ, главного объекта и обратной роли (опционально).",
+                "operationId": "ListRelationsRepresentation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID главного лица",
+                        "name": "object",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Массив ID обратных ролей",
+                        "name": "roles",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "страница пагинации",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ограничение по размеру",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pagination"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/{group}/{id}": {
+            "delete": {
+                "description": "Эндпоинт для удаления участника сделки из ГСЗ.\nПараметр relation опционален и создает ветвление - при наличии параметра,\nудаляются прямая и обратная связи.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Удаление участника сделки.",
+                "operationId": "DeleteMembers",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID группы",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID участника сделки",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID связи",
+                        "name": "rel",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/{group}/{role}": {
+            "get": {
+                "description": "Эндпоинт для получения всех участников ГСЗ с определенным критерием связанности с пагинацией.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Получить список участников по группе и роли.",
+                "operationId": "ListRelationsByGroupAndRole",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ГСЗ",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID роли (критерия связанности)",
+                        "name": "role",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "страница пагинации",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ограничение по размеру",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pagination"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/objects/{id}": {
+            "get": {
+                "description": "Эндпоинт для просмотра участника сделки.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Просмотреть участника сделки.",
+                "operationId": "RetrieveMembers",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID участника сделки",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Member"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Эндпоинт для внесения правок в данных об участнике сделки.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Members"
+                ],
+                "summary": "Обновление данных об участнике сделки.",
+                "operationId": "UpdateMembers",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID участника сделки",
+                        "name": "ID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Данные для обновления записи",
+                        "name": "Payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Member"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Member"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/refs/criteria": {
+            "post": {
+                "description": "Эндпоинт созадет запись критерия.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "References"
+                ],
+                "summary": "Создать объект критерия.",
+                "operationId": "CreateCriteria",
+                "parameters": [
+                    {
+                        "description": "Данные объекта",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Reference"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/refs/criteria-legal-forms": {
+            "get": {
+                "description": "Эндпоинт возвращает список критериев с\nсоответствующими ОПФ (организационно-правовые формы).\nВсе ОПФ будут в поле `children` каждого критерия,\nт.к. используется единая модель для справочников.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "References"
+                ],
+                "summary": "Список критериев и ОПФ.",
+                "operationId": "ListCriteriaLegalForms",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Reference"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/refs/criteria/{criteria}/legal-form/{form}": {
+            "post": {
+                "description": "Эндпоинт связывает критерий к ОПФ.",
+                "tags": [
+                    "References"
+                ],
+                "summary": "Связать критерий к ОПФ.",
+                "operationId": "MapCriteriaToLegalForm",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID критерия",
+                        "name": "criteria",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID ОПФ",
+                        "name": "form",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/refs/criteria/{id}": {
+            "put": {
+                "description": "Эндпоинт обновляет и возвращает объект критерия.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "References"
+                ],
+                "summary": "Обновить объект критерия.",
+                "operationId": "UpdateCriteria",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID объекта",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Данные объекта для обновления",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Reference"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Эндпоинт удаляет критерий по ID.",
+                "tags": [
+                    "References"
+                ],
+                "summary": "Удалить критерий.",
+                "operationId": "DeleteCriteria",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID критерия",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/refs/nested-criteria": {
+            "get": {
+                "description": "Эндпоинт возвращает список вложенных критериев родитель-\u003eдети.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "References"
+                ],
+                "summary": "Список вложенных критериев.",
+                "operationId": "ListNestedCriteria",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID ОПФ",
+                        "name": "lf",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Reference"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/refs/{table}": {
+            "get": {
+                "description": "Эндпоинт возвращает список справочника по его имени.\nДоступны следующие справочники: `departments` (отделы банка),\n`countries` (страны), `currencies` (валюты), `disclosure_types`\n(типы раскрытия сделок), `pledge_types` (типы обеспечения),\n`products` (продукты), `reasons` (причины заполнения анкеты),\n`resident_types` (типы резидентности), `segments` (типы сегментов бизнеса),\n`states` (состояния карточки ГСЗ), `criteria` (критерии связанности),\n`legal_forms` (организационно-правовые формы), `roles` (роли пользователей)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "References"
+                ],
+                "summary": "Список справочника.",
+                "operationId": "ListReference",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Имя справочника",
+                        "name": "table",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Reference"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Эндпоинт созадет объект.\nДоступны следующие справочники: `departments` (отделаы банка), `countries` (страны),\n`currencies` (валюты), `disclosure_types` (типы раскрытия сделок),\n`pledge_types` (типы обеспечения), `products` (продукты),\n`reasons` (причины заполнения анкеты), `resident_types` (типы резидентности),\n`segments` (типы сегментов бизнеса), `states` (состояния карточки ГСЗ),\n`criteria` (критерии связанности), `legal_forms` (организационно-правовые формы),\n`roles` (роли пользователей)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "References"
+                ],
+                "summary": "Создать объект справочника.",
+                "operationId": "CreateReference",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Имя справочника",
+                        "name": "table",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Данные объекта",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Reference"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/refs/{table}/{id}": {
+            "get": {
+                "description": "Эндпоинт возвращает объект справочника по ID.\nДоступны следующие справочники: `departments` (отделаы банка), `countries` (страны),\n`currencies` (валюты), `disclosure_types` (типы раскрытия сделок),\n`pledge_types` (типы обеспечения), `products` (продукты),\n`reasons` (причины заполнения анкеты), `resident_types` (типы резидентности),\n`segments` (типы сегментов бизнеса), `states` (состояния карточки ГСЗ),\n`criteria` (критерии связанности), `legal_forms` (организационно-правовые формы),\n`roles` (роли пользователей)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "References"
+                ],
+                "summary": "Просмотреть объект справочника.",
+                "operationId": "GetReference",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Имя справочника",
+                        "name": "table",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID объекта",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Reference"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Эндпоинт обновляет и возвращает объект справочника.\nДоступны следующие справочники: `departments` (отделаы банка), `countries` (страны),\n`currencies` (валюты), `disclosure_types` (типы раскрытия сделок),\n`pledge_types` (типы обеспечения), `products` (продукты),\n`reasons` (причины заполнения анкеты), `resident_types` (типы резидентности),\n`segments` (типы сегментов бизнеса), `states` (состояния карточки ГСЗ),\n`criteria` (критерии связанности), `legal_forms` (организационно-правовые формы),\n`roles` (роли пользователей)\nПередавать объект полностью - измененные и не измененные данные.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "References"
+                ],
+                "summary": "Обновить объект справочника.",
+                "operationId": "UpdateReference",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Имя справочника",
+                        "name": "table",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID объекта",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Данные объекта для обновления",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Reference"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Эндпоинт удаляет объект справочника по ID.\nДоступны следующие справочники: `departments` (отделаы банка), `countries` (страны),\n`currencies` (валюты), `disclosure_types` (типы раскрытия сделок),\n`pledge_types` (типы обеспечения), `products` (продукты),\n`reasons` (причины заполнения анкеты), `resident_types` (типы резидентности),\n`segments` (типы сегментов бизнеса), `states` (состояния карточки ГСЗ),\n`criteria` (критерии связанности), `legal_forms` (организационно-правовые формы),\n`roles` (роли пользователей)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "References"
+                ],
+                "summary": "Удалить объект справочника.",
+                "operationId": "UpdateReference",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Имя справочника",
+                        "name": "table",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID объекта",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "echo.HTTPError": {
+            "type": "object",
+            "properties": {
+                "message": {}
+            }
+        },
+        "models.Changelog": {
+            "type": "object",
+            "properties": {
+                "alteration": {},
+                "author": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "entity": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "operation": {
+                    "type": "string"
+                },
+                "relation": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Coordination": {
+            "type": "object",
+            "properties": {
+                "coordinatedAt": {
+                    "type": "string"
+                },
+                "coordinator": {
+                    "type": "string"
+                },
+                "coordinatorRole": {
+                    "type": "string"
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.File"
+                    }
+                },
+                "group": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "rejectionReason": {
+                    "type": "string"
+                },
+                "result": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.DisjoinJustification": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "justification": {
+                    "type": "string"
+                },
+                "mainGroup": {
+                    "type": "integer"
+                },
+                "secondaryGroup": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.File": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "digest": {
+                    "type": "string"
+                },
+                "file_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "uploadedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.FileSeq": {
+            "type": "object",
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "models.Group": {
+            "type": "object",
+            "properties": {
+                "allBorrowers": {
+                    "type": "boolean"
+                },
+                "allCompanies": {
+                    "type": "boolean"
+                },
+                "approvedAt": {
+                    "type": "string"
+                },
+                "author": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "department": {
+                    "type": "integer"
+                },
+                "departmentName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parent": {
+                    "type": "integer"
+                },
+                "reason": {
+                    "type": "integer"
+                },
+                "state": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Limit": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "integer"
+                },
+                "group": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "indRate": {
+                    "type": "number"
+                },
+                "limitID": {
+                    "type": "string"
+                },
+                "limitUsage": {
+                    "type": "number"
+                },
+                "object": {
+                    "type": "integer"
+                },
+                "product": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Limits": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "limits": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Limit"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Member": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "disclosureType": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "idNum": {
+                    "type": "string"
+                },
+                "idNumUnknown": {
+                    "type": "boolean"
+                },
+                "ipdl": {
+                    "type": "boolean"
+                },
+                "isBorrower": {
+                    "type": "boolean"
+                },
+                "isClient": {
+                    "type": "boolean"
+                },
+                "legalForm": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "pledgeType": {
+                    "type": "integer"
+                },
+                "relatedToBank": {
+                    "type": "boolean"
+                },
+                "resident": {
+                    "type": "integer"
+                },
+                "segment": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Pagination": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "data": {},
+                "extra": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Reference": {
+            "type": "object",
+            "properties": {
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Reference"
+                    }
+                },
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parent": {
+                    "type": "integer"
+                },
+                "reverse": {
+                    "type": "integer"
+                },
+                "reverseCode": {
+                    "type": "string"
+                },
+                "reverseName": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Relation": {
+            "type": "object",
+            "properties": {
+                "connectionType": {
+                    "type": "integer"
+                },
+                "directRole": {
+                    "type": "integer"
+                },
+                "group": {
+                    "type": "integer"
+                },
+                "head": {
+                    "type": "integer"
+                },
+                "headCountry": {
+                    "type": "integer"
+                },
+                "headIN": {
+                    "type": "string"
+                },
+                "headLegalForm": {
+                    "type": "integer"
+                },
+                "headName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "inverseRole": {
+                    "type": "integer"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "percentage": {
+                    "type": "integer"
+                },
+                "tail": {
+                    "type": "integer"
+                },
+                "tailCountry": {
+                    "type": "integer"
+                },
+                "tailIN": {
+                    "type": "string"
+                },
+                "tailLegalForm": {
+                    "type": "integer"
+                },
+                "tailName": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SearchData": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "group": {
+                                "type": "integer"
+                            },
+                            "groupName": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "idNum": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,307 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Внутренние проверки ГСЗ.",
+        "title": "engine",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Kentaeva Akgul",
+            "email": "Akgul.Kentaeva@sberbank.kz"
+        },
+        "version": "0.1"
+    },
+    "host": "engine-gsz.apps.ocp-t.sberbank.kz",
+    "basePath": "/api/v1",
+    "paths": {
+        "/check": {
+            "post": {
+                "description": "Эндпоинт проверяет участников указанной группы через АМЛ, ИПДЛ, ЛСБОО (толькоз заёмщик).\nПараметр `all` указывает каких участников необходимо проверить (по матрице проверок).\nЕсли этот параметр false - проверяются только главные участники -\nзаёмщики, созаёмщики, гаранты, залогодатели.\nИначе проверяются все участники.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Engine"
+                ],
+                "summary": "Проверка группы.",
+                "operationId": "Check",
+                "parameters": [
+                    {
+                        "description": "Входящие данные",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CheckGroup"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.ResponseWF"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/latest-checks/{group}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Engine"
+                ],
+                "summary": "Получить последние проверки группы.",
+                "operationId": "LatestChecks",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID группы",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.ResponseWF"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/result-check/{rquid}": {
+            "get": {
+                "description": "Ресурс принимает данные формата JSON.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Engine"
+                ],
+                "summary": "Возвращает данные по проверкам.",
+                "operationId": "GetResultCheck",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Входящие данные",
+                        "name": "rquid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Вернуть проверки по всем участникам сделки?",
+                        "name": "all",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseWF"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/update-status": {
+            "post": {
+                "description": "Ресурс принимает данные формата JSON.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Engine"
+                ],
+                "summary": "Обновляет статус заявки.",
+                "operationId": "UpdateStatus",
+                "parameters": [
+                    {
+                        "description": "Входящие данные",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateStatusRq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateStatusRs"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "echo.HTTPError": {
+            "type": "object",
+            "properties": {
+                "message": {}
+            }
+        },
+        "model.CheckGroup": {
+            "type": "object",
+            "properties": {
+                "all": {
+                    "type": "boolean"
+                },
+                "group": {
+                    "type": "integer"
+                },
+                "state": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.ResponseWF": {
+            "type": "object",
+            "properties": {
+                "AML": {
+                    "type": "string"
+                },
+                "IPDL": {
+                    "type": "string"
+                },
+                "LSBOO": {
+                    "type": "string"
+                },
+                "bankOperation": {
+                    "type": "string"
+                },
+                "criteriaGroup": {
+                    "type": "integer"
+                },
+                "decision": {
+                    "type": "string"
+                },
+                "directRole": {
+                    "type": "integer"
+                },
+                "group": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "idNum": {
+                    "type": "string"
+                },
+                "inverseRole": {
+                    "type": "integer"
+                },
+                "latestCheck": {
+                    "type": "boolean"
+                },
+                "member": {
+                    "type": "integer"
+                },
+                "results": {},
+                "rquid": {
+                    "type": "string"
+                },
+                "sendDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateStatusRq": {
+            "type": "object",
+            "properties": {
+                "applicantID": {
+                    "type": "integer"
+                },
+                "statusCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateStatusRs": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
